@@ -17,23 +17,26 @@ One way we can avoid this is by setting up proxy from your domain to Highlight. 
 
 ## Setting up the proxy
 
-1.  Upgrade to the Startup Tier [https://www.highlight.run/pricing](https://www.highlight.run/pricing)
+-  Upgrade to the Startup Tier [https://www.highlight.run/pricing](https://www.highlight.run/pricing)
 
-2.  On your domain, add a `CNAME` record that points `highlight.<YOUR_DOMAIN>` to `pub.highlight.run`
+-  On your domain, add a `CNAME` record that points `highlight.<YOUR_DOMAIN>` to `pub.highlight.run`
 
-3.  Send us an email (support\@highlight.run) or intercom ticket with your domain
+-  Send us an email (support\@highlight.run) or intercom ticket with your domain
+
 
 Below is an example email/message that you can send over.
 
+```
 > Hello!
 >
 > I'd like to use the Highlight Proxy and I've upgraded to the Startup Tier. I've set up an CNAME record for: highlight.piedpiper.com
+```
 
 ### Example
 
 You have an app running on `https://piedpiper.com`. Your DNS record will point `highlight.piedpiper.com` to our backend.
 
-## Using the Proxy
+## Using the Proxy in `H.init()`
 
 In your app where you call [H.init()](../../../sdk/client.md#Hinit), you will need to set `backendUrl` to the DNS record you just created. For the example above:
 

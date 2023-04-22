@@ -51,6 +51,7 @@ type CustomContactsResponse struct {
 }
 
 func (h *HubspotApi) createContactForAdmin(ctx context.Context, adminID int, email string, userDefinedRole string, userDefinedPersona string, first string, last string, phone string, referral string) (contactId *int, err error) {
+	return nil, nil
 	var hubspotContactId int
 	if resp, err := h.hubspotClient.Contacts().Create(hubspot.ContactsRequest{
 		Properties: []hubspot.Property{
@@ -114,6 +115,7 @@ func (h *HubspotApi) CreateContactForAdmin(ctx context.Context, adminID int, ema
 }
 
 func (h *HubspotApi) CreateContactCompanyAssociation(ctx context.Context, adminID int, workspaceID int, db *gorm.DB) error {
+	return nil
 	admin := &model.Admin{}
 	if err := db.Model(&model.Admin{}).Where("id = ?", adminID).First(&admin).Error; err != nil {
 		return e.Wrap(err, "error retrieving admin details")
@@ -149,6 +151,7 @@ func (h *HubspotApi) CreateContactCompanyAssociation(ctx context.Context, adminI
 }
 
 func (h *HubspotApi) CreateCompanyForWorkspace(ctx context.Context, workspaceID int, adminEmail string, name string, db *gorm.DB) (companyID *int, err error) {
+	return nil, nil
 	// Don't create for Demo account
 	if workspaceID == 0 {
 		return
