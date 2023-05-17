@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -250,6 +251,8 @@ func (o *Handler) HandleTrace(w http.ResponseWriter, r *http.Request) {
 						}
 
 						projectLogs[projectID] = append(projectLogs[projectID], logRow)
+					} else {
+						lg(ctx, &projectID, &sessionID, &requestID, &source, resourceAttributes, spanAttributes, eventAttributes).Warnf("otel received unknown event %s", event.Name())
 					}
 				}
 			}
