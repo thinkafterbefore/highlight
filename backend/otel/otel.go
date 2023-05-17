@@ -212,7 +212,7 @@ func (o *Handler) HandleTrace(w http.ResponseWriter, r *http.Request) {
 
 	var projectLogs = make(map[string][]*clickhouse.LogRow)
 
-	var projectMetrics = make(map[string][]*model.MetricInput)
+	var traceMetrics = make(map[string][]*model.MetricInput)
 
 	spans := req.Traces().ResourceSpans()
 	for i := 0; i < spans.Len(); i++ {
@@ -286,7 +286,7 @@ func (o *Handler) HandleTrace(w http.ResponseWriter, r *http.Request) {
 							continue
 						}
 
-						projectMetrics[projectID] = append(projectMetrics[projectID], metric)
+						traceMetrics[sessionID] = append(traceMetrics[sessionID], metric)
 					} else {
 						lg(ctx, &projectID, &sessionID, &requestID, &source, resourceAttributes, spanAttributes, eventAttributes).Warnf("otel received unknown event %s", event.Name())
 					}
@@ -323,18 +323,12 @@ func (o *Handler) HandleTrace(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	for projectID, metrics := range projectMetrics {
-		projectIDInt, err := clickhouse.ProjectToInt(projectID)
-		if err != nil {
-			log.WithContext(ctx).WithError(err).Error("invalid otel metrics project id")
-			continue
-		}
-
+	for sessionID, metrics := range traceMetrics {
 		if err := o.resolver.BatchedQueue.Submit(ctx, &kafkaqueue.Message{
 			Type: kafkaqueue.MarkBackendSetup,
 			MarkBackendSetup: &kafkaqueue.MarkBackendSetupArgs{
-				ProjectID: projectIDInt,
-				Type:      model2.MarkBackendSetupTypeError,
+				SessionSecureID: pointy.String(sessionID),
+				Type:            model2.MarkBackendSetupTypeError,
 			},
 		}, uuid.New().String()); err != nil {
 			log.WithContext(ctx).WithError(err).Error("failed to submit otel mark backend setup")
@@ -345,8 +339,8 @@ func (o *Handler) HandleTrace(w http.ResponseWriter, r *http.Request) {
 		err = o.resolver.ProducerQueue.Submit(ctx, &kafkaqueue.Message{
 			Type: kafkaqueue.PushMetrics,
 			PushMetrics: &kafkaqueue.PushMetricsArgs{
-				ProjectID: projectIDInt,
-				Metrics:   metrics,
+				SessionSecureID: sessionID,
+				Metrics:         metrics,
 			}}, uuid.New().String())
 		if err != nil {
 			log.WithContext(ctx).WithError(err).Error("failed to submit otel project metrics to public worker queue")
