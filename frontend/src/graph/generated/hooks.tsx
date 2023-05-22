@@ -11338,9 +11338,6 @@ export const GetAlertsPagePayloadDocument = gql`
 			DailyFrequency
 			disabled
 		}
-		session_feedback_alerts(project_id: $project_id) {
-			...SessionAlertFragment
-		}
 		new_session_alerts(project_id: $project_id) {
 			...SessionAlertFragment
 		}

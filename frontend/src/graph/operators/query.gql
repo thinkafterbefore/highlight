@@ -1750,9 +1750,6 @@ query GetAlertsPagePayload($project_id: ID!) {
 		DailyFrequency
 		disabled
 	}
-	session_feedback_alerts(project_id: $project_id) {
-		...SessionAlertFragment
-	}
 	new_session_alerts(project_id: $project_id) {
 		...SessionAlertFragment
 	}
