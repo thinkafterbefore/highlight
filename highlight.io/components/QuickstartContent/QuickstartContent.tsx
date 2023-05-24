@@ -40,6 +40,8 @@ import { RubyOtherLogContent } from './logging/ruby/other'
 import { RubyRailsLogContent } from './logging/ruby/rails'
 import { DevDeploymentContent } from './self-host/dev-deploy'
 import { SelfHostContent } from './self-host/self-host'
+import { FluentForwardContent } from './logging/fluentd'
+import { FileContent } from './logging/file'
 
 export type QuickStartOptions = {
 	title: string
@@ -99,6 +101,8 @@ export enum QuickStartType {
 	JSWinston = 'winston',
 	JStRPC = 'trpc',
 	HTTPOTLP = 'curl',
+	FluentForward = 'fluent-forward',
+	File = 'file',
 	RubyOther = 'other',
 	RubyRails = 'rails',
 	HostingVercel = 'vercel',
@@ -207,6 +211,13 @@ export const quickStartContent = {
 			subtitle:
 				'Get started with logging in your application via HTTP or OTLP.',
 			[QuickStartType.HTTPOTLP]: HTTPContent,
+		},
+		other: {
+			title: 'Other',
+			subtitle:
+				'Get started with logging in your application via HTTP or OTLP.',
+			[QuickStartType.FluentForward]: FluentForwardContent,
+			[QuickStartType.File]: FileContent,
 		},
 		ruby: {
 			title: 'Ruby',
