@@ -55,7 +55,7 @@ jobs:
                   popd;
 
                   # wait for highlight to be ready
-                  yarn dlx wait-on -l -s 4 https://127.0.0.1:3000/index.html  https://127.0.0.1:3000/src/routers/AppRouter/AppRouter.tsx http://127.0.0.1:8080/dist/index.js https://127.0.0.1:8082/health;                
+                  yarn dlx wait-on -l -s 4 https://127.0.0.1:3000/index.html  https://127.0.0.1:3000/src/routers/AppRouter/AppRouter.tsx http://127.0.0.1:8080/dist/index.js https://127.0.0.1:8082/health;
 
                   # run cypress tests
                   yarn cy:run;
